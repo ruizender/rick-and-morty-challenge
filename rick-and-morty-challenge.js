@@ -28,3 +28,26 @@ function countByPage(results, char) {
   return result;
 }
 
+
+async function start() {
+  startDate = new Date();
+  countCalls = 3; // making 3 async calls toms
+  getResponse('https://rickandmortyapi.com/api/location', 'l', 0, count => {countLocation = count});
+  getResponse('https://rickandmortyapi.com/api/character', 'c', 0, count => {countCharacter = count});
+  getResponse('https://rickandmortyapi.com/api/episode', 'e', 0, count => {countEpisode = count});
+}
+
+function callback() {
+  if (countCalls > 1) {
+    countCalls--;
+  } else {
+    endDate = new Date();
+    console.log(buildJson(((endDate - startDate)+"ms"),countLocation,countCharacter,countEpisode));// Linea final
+  }
+}
+
+function buildJson(executionTime, countLocation, countCharacter, countEpisode) {
+  return {"exercise_name": "Char counter","time": executionTime,"in_time": true,"results": [{"char": "l", "count": countLocation,"resource": "location"},{"char": "e","count": countEpisode,"resource": "episode"},{"char": "c","count": countCharacter,"resource": "character"}]}
+}
+
+start();
